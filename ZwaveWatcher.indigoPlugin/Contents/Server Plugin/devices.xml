@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<Devices>
+	<!-- This custom device illustrates how a plugin can update custom device
+	states which can be used in Device State Changed triggers, conditionals,
+	and inspected on Control Pages. The python runConcurrentThread() method
+	will update the states every second.
+	-->
+	<Device type="custom" id="zwatch">
+		<Name>ZWave Watcher</Name>
+		<ConfigUI>
+			<Field id="deviceId" type="menu">
+				<Label>ZWave Device:</Label>
+				<List class="indigo.devices" filter="indigo.zwave"/>
+			</Field>
+		</ConfigUI>
+	</Device>
+
+</Devices>
