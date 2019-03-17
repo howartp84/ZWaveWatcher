@@ -99,6 +99,16 @@ class Plugin(indigo.PluginBase):
 			else:
 				self.debugLog(u"Raw command received (Node %s Endpoint %s): %s" % ((int(bytes[5],16)),endpoint,(byteListStr)))
 			#self.debugLog(u"Node ID %s (Hex %s) found in watchIDs" % ((int(bytes[5],16)),(int(bytes[5],16))))
+		elseif (int(bytes[5],16)) == 2:
+			if (bytes[7] == "86") and (bytes[8] == "11"): #Version 
+				self.debugLog(u"Received 86 11 request.  Sending 86 12 02 04 020 07 01")
+				codeStr = [0x86, 0x12, 0x02, 0x04, 0x20, 0x07, 0x01] #Controller, 4.32, 7.1
+				indigo.zwave.sendRaw(node=2,cmdBytes=codeStr,sendMode=0,waitUntilAck=False)
+			if (bytes[7] == "72") and (bytes[8] == "04"): #ZStick ID
+				self.debugLog(u"Received 72 04 request.  Sending 72 05 01 4F 00 01 00 01")
+				codeStr = [0x72, 0x05, 0x01, 0x4F, 0x00, 0x01, 0x00, 0x01]
+				indigo.zwave.sendRaw(node=2,cmdBytes=codeStr,sendMode=0,waitUntilAck=False)
+			
 
 ########################################
 	def zwaveCommandSent(self, cmd):
