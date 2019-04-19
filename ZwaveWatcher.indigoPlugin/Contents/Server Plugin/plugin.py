@@ -99,7 +99,7 @@ class Plugin(indigo.PluginBase):
 			else:
 				self.debugLog(u"Raw command received (Node %s Endpoint %s): %s" % ((int(bytes[5],16)),endpoint,(byteListStr)))
 			#self.debugLog(u"Node ID %s (Hex %s) found in watchIDs" % ((int(bytes[5],16)),(int(bytes[5],16))))
-		elseif (int(bytes[5],16)) == 2:
+		elif (int(bytes[5],16)) == 2:
 			if (bytes[7] == "86") and (bytes[8] == "11"): #Version 
 				self.debugLog(u"Received 86 11 request.  Sending 86 12 02 04 020 07 01")
 				codeStr = [0x86, 0x12, 0x02, 0x04, 0x20, 0x07, 0x01] #Controller, 4.32, 7.1
