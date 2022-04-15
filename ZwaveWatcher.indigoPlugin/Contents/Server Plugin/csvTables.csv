@@ -1,0 +1,4 @@
+key,size,fixed,Table,1,2,3,4,5,6,7,8,9,10
+[TAB21],5,F,21,0x00: Off,0x01 - 0x63: 1-100%,0x64 - 0xFD: Reserved,0xFE: Unknown,0xFF: On,,,,,
+[TAB25],3,T,25,00 - Key Pressed,01 - Key Released,02 - Key Held Down,,,,,,,
+[TAB27],7,T,27,00 - Key Pressed,01 - Key Released,02 - Key Held Down,03 -  Key Pressed 2 times,04 -  Key Pressed 3 times,05 -  Key Pressed 4 times,06 -  Key Pressed 5 times,,,

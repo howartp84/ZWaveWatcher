@@ -33,6 +33,7 @@ class Plugin(indigo.PluginBase):
 	def __init__(self, pluginId, pluginDisplayName, pluginVersion, pluginPrefs):
 		super(Plugin, self).__init__(pluginId, pluginDisplayName, pluginVersion, pluginPrefs)
 		self.debug = True;
+		self.version = pluginVersion
 
 		self.watchIDs = list()
 
@@ -82,6 +83,7 @@ class Plugin(indigo.PluginBase):
 	########################################
 	def startup(self):
 		self.debugLog(u"startup called")
+		self.debugLog("Plugin version: {}".format(self.version))
 		indigo.zwave.subscribeToIncoming()
 		indigo.zwave.subscribeToOutgoing()
 
@@ -140,11 +142,11 @@ class Plugin(indigo.PluginBase):
 			#self.debugLog(indigo.devices[devID])
 
 			if (endpoint == None):
-				self.debugLog(u"Raw command received (Node %s): %s" % ((int(bytes[5],16)),(byteListStr)))
+				self.debugLog(u"Raw command received (Node {}): {}".format((int(bytes[5],16)),(byteListStr)))
 				self.cmdDecode(cmd,classStr)
 			else:
-				self.debugLog(u"Raw command received (Node %s Endpoint %s): %s" % ((int(bytes[5],16)),endpoint,(byteListStr)))
-			#self.debugLog(u"Node ID %s (Hex %s) found in watchIDs" % ((int(bytes[5],16)),(int(bytes[5],16))))
+				self.debugLog(u"Raw command received (Node {} Endpoint {}): {}".format((int(bytes[5],16)),endpoint,(byteListStr)))
+			#self.debugLog(u"Node ID {} (Hex {}) found in watchIDs".format((int(bytes[5],16)),(int(bytes[5],16))))  #THIS LINE DOESN'T LOOK RIGHT IF I EVER UNCOMMENT IT
 		elif (int(bytes[5],16)) == 2:
 			if (bytes[7] == "86") and (bytes[8] == "11"): #Version
 				self.debugLog(u"Received 86 11 request.  Sending 86 12 02 04 020 07 01")
@@ -167,18 +169,18 @@ class Plugin(indigo.PluginBase):
 		cmdType = bytes[8]
 		cmdPos = classStr.index(cmdClass)
 		cmdVer = classStr[cmdPos+3:cmdPos+4] #25v1 => 1
-		cmdKey = "%s %s v%s" % (cmdClass,cmdType,cmdVer)
+		cmdKey = "{} {} v{}".format(cmdClass,cmdType,cmdVer)
 
 		try:
 			cmdDict = self.csvCmds[cmdKey]
 		except KeyError as k:
-			self.debugLog("Command class: %sv%s" % (cmdClass,cmdVer))
-			self.debugLog("Command not yet decoded: %s" % cmdKey)
+			self.debugLog("Command class: {}v{}".format(cmdClass,cmdVer))
+			self.debugLog("Command not yet decoded: {}".format(cmdKey))
 			return
 
 		cmdName = cmdDict['cmdName']
 
-		self.debugLog("Command class: %sv%s (%s)" % (cmdClass,cmdVer,cmdName))
+		self.debugLog("Command class: {}v{} ({})".format(cmdClass,cmdVer,cmdName))
 
 		#self.debugLog(cmdDict)
 
@@ -187,19 +189,19 @@ class Plugin(indigo.PluginBase):
 			val = cmdDict[str(i)]
 			if "[TAB" in val:
 				tblPos = val.index("[TAB")
-				tblStr = "[TAB%s]" % val[tblPos+4:tblPos+6]
+				tblStr = "[TAB{}]".format(val[tblPos+4:tblPos+6])
 				tblVal = self.csvTables[tblStr]
-				#self.debugLog("tblVal => %s" % tblVal)
+				#self.debugLog("tblVal => {}".format(tblVal))
 				if tblVal['fixed'] == "T":
 					for b in range(1,int(tblVal['size'])+1):
-						#self.debugLog("%s in %s" % (bytes[i],tblVal[str(b)]))
+						#self.debugLog("{} in {}".format(bytes[i],tblVal[str(b)]))
 						#self.debugLog(str(bytes[i] in tblVal[str(b)]))
 						if bytes[i] in tblVal[str(b)]:
 							self.debugLog(val.replace(tblStr,tblVal[str(b)]))
 				else:
-					self.debugLog(val.replace(tblStr,"0x%s, see table:" % bytes[i]))
+					self.debugLog(val.replace(tblStr,"0x{}, see table:".format(bytes[i])))
 					for b in range(1,int(tblVal['size'])+1):
-						self.debugLog("   %s" % tblVal[str(b)])
+						self.debugLog("   {}".format(tblVal[str(b)]))
 			elif "#" in val: #Decimal
 				self.debugLog("{} {}".format(val.replace(" #",""),int(bytes[i],16)))
 			elif "%" in val: #Percent
@@ -229,7 +231,7 @@ class Plugin(indigo.PluginBase):
 		if nodeId:
 			if int(nodeId) in self.watchIDs:
 				if (endpoint == None):
-					self.debugLog(u"Raw command sent (Node %s): %s (%s)" % (nodeId,byteListStr,cmdSuccess))
+					self.debugLog(u"Raw command sent (Node {}): {} ({})".format(nodeId,byteListStr,cmdSuccess))
 				else:
-					self.debugLog(u"Raw command sent (Node %s Endpoint %s): %s (%s)" % (nodeId,endpoint,byteListStr,cmdSuccess))
+					self.debugLog(u"Raw command sent (Node {} Endpoint {}): {} ({})".format(nodeId,endpoint,byteListStr,cmdSuccess))
 

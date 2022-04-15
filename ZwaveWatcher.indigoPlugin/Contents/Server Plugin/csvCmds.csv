@@ -1,0 +1,7 @@
+key,byteSize,cmdClass,CmdType,cmdVersion,cmdName,9,10,11,12,13,14,15,16,17,18,19,20,21,22
+25 03 v1,1,25,03,v1,SWITCH_BINARY_REPORT,Value: [TAB21],,,,,,,,,,,,,
+25 03 v2,3,25,03,v2,SWITCH_BINARY_REPORT,Current Value: [TAB21],Target Value: [TAB21],Duration: [TAB08],,,,,,,,,,,
+5B 03 v1,3,5B,03,v1,CENTRAL_SCENE_NOTIFICATION,Sequence:,Key Attributes: [TAB25],Scene No: #,,,,,,,,,,,
+5B 03 v2,3,5B,03,v2,CENTRAL_SCENE_NOTIFICATION,Sequence:,Key Attributes: [TAB27],Scene No: #,,,,,,,,,,,
+5B 03 v3,2,5B,03,v3,CENTRAL_SCENE_NOTIFICATION,Sequence:,[BITS10],,,,,,,,,,,,
+80 03 v1,1,80,03,v1,BATTERY_REPORT,Battery Level: %,,,,,,,,,,,,,
